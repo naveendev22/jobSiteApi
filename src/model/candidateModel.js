@@ -1,0 +1,54 @@
+const mongoose = require("mongoose");
+const {Schema} = mongoose;
+const candidateSchema = new Schema({
+    fieldsName:{
+        required:true,
+        type:String
+    },
+    email:{
+        required:true,
+        unique:true,
+        type:String
+    },
+    password:{
+        required:true,
+        unique:true,
+        type:String
+    },
+    confirmPassword:{
+        required:true,
+        type:String
+    },
+    mobile:{
+        required:true,
+        unique:true,
+        type:Number
+    },
+    resume:{
+        required:true,
+        type:String
+    },
+    skillsets:{
+        required:true,
+        type:String
+    },
+    experience:{
+        required:true,
+        type:Number
+    },
+    isActive:{
+        type:Boolean,
+        default:true
+    },
+    createdBy:String,
+    creadtedAt:{
+        type:Date,
+        default:Date.now
+    },
+    updatedBy:String,
+    updtaedAt:{
+        type:Date,
+        default:Date.now
+    }
+});
+module.exports = mongoose.model("candidate",candidateSchema);
