@@ -12,7 +12,6 @@ const candidateSchema = new Schema({
     },
     password:{
         required:true,
-        unique:true,
         type:String
     },
     confirmPassword:{
