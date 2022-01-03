@@ -12,7 +12,6 @@ const recruiterSchema = new Schema({
     },
     password:{
         required:true,
-        unique:true,
         type:String
     },
     confirmPassword:{
