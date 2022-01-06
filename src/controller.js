@@ -57,12 +57,30 @@ exports.candidateLogin = async(req,res)=>{
 };
 exports.addRecruiter = async(req,res)=>{
     const params = req.body; 
-    const userExist = await this.recruiterModel
+    const passwordExits = await recruiterModel.findOne({password:params.password});
+    const userExist = await recruiterModel.findOne({
+        $or:[{
+            email:params.email
+        },{
+            aadharNo:params.aadharNo
+        },{
+            mobile:params.mobile
+        }]
+    });
     if (params.password != params.confirmPassword){
         return res.status(422).json({
             success:false,
             message:`Password and Confirm Password should be same`
-        })
+        });
+    }else if(userExist){
+        return res.status(403).json({
+            success:false,
+            message:`${params.email} or ${params.aadharNo} already exists please login`
+        });
+    }else if (passwordExits){
+        return res.status(403).json({
+            message :`${params.password} already used please use other password`
+        });
     }else{
         await new recruiterModel({
             name:params.name,
@@ -77,7 +95,7 @@ exports.addRecruiter = async(req,res)=>{
             message:"recruiter added successfullly",
             data:[]
         })
-    }
+    };
 };
 exports.listRecruiter = async(req,res)=>{
     const list = await recruiterModel.find({
@@ -104,6 +122,22 @@ exports.recruiterLogin = async(req,res)=>{
             message:"email or password incorrect"
         })
     }
+};
+exports.recruiterDelete = async (req,res)=>{
+   const deletRecruiter = await recruiterModel.findByIdAndDelete(req.body._id);
+   if (deletRecruiter){
+       return res.status(200).json({
+           success:true,
+           message:` deleted successfully`
+       })
+   }else {
+       return res.status(403).json({
+           success:false,
+           message:`can't find id ${req.body._id} `
+           
+       })
+   }
+
 };
 
 candidateModel.aggregate([
